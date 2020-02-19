@@ -1,0 +1,19 @@
+service: channel-status-notifier
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+
+functions:
+  handler:
+    handler: handler.handler
+    events:
+      - http:
+          path: handler
+          method: any
+  trigger:
+    handler: trigger.trigger
+    events:
+      - http:
+          path: trigger
+          method: any
