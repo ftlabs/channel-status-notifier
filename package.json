@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js",
-    "locally": "node -e \"console.log(require('./index').handler({}));\""
+    "start": "node index.js"
   },
   "license": "MIT",
   "dependencies": {
