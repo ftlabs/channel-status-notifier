@@ -7,6 +7,9 @@ provider:
     NODE_ENV: "${file(./serverless.env.yml):NODE_ENV}"
     SLACK_TOKEN: "${file(./serverless.env.yml):SLACK_TOKEN}"
 
+plugins:
+  - serverless-offline
+
 functions:
   handler:
     handler: handler.handler

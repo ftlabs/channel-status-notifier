@@ -11,5 +11,8 @@
   "dependencies": {
     "@slack/web-api": "^5.4.0",
     "dotenv": "^8.2.0"
+  },
+  "devDependencies": {
+    "serverless-offline": "^5.12.1"
   }
 }
