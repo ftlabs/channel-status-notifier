@@ -1,11 +1,14 @@
-exports.handler = async function(event, context) {
-  console.log("EVENT: \n" + JSON.stringify(event, null, 2));
-  const result = await getMembers({
-    channel: JSON.parse(event.body).event.channel
+const axios = require("axios");
+
+exports.trigger = async function(event, context) {
+  axios({
+    method: "post",
+    url: "http://localhost:3000/handler",
+    data: event.body
   });
 
   return {
     statusCode: 200,
-    body: JSON.stringify(result)
+    body: "success"
   };
 };

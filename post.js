@@ -1,5 +1,3 @@
-"use strict";
-
 if (process.env.NODE_ENV !== "production") require("dotenv").config();
 const { WebClient, ErrorCode } = require("@slack/web-api");
 
@@ -165,14 +163,17 @@ function prepMessage(statuses) {
   return message;
 }
 
-exports.handler = async function(event, context) {
+exports.post = async function(event, context) {
   console.log("EVENT: \n" + JSON.stringify(event, null, 2));
+  console.log(
+    "JSON.parse(event.body).event.channel",
+    JSON.parse(event.body).event.channel
+  );
   const result = await getMembers({
     channel: JSON.parse(event.body).event.channel
   });
-
   return {
     statusCode: 200,
-    body: JSON.stringify(result)
+    body: "success"
   };
 };

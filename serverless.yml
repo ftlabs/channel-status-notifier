@@ -11,8 +11,8 @@ plugins:
   - serverless-offline
 
 functions:
-  handler:
-    handler: handler.handler
+  post:
+    handler: post.post
     events:
       - http:
           path: handler
