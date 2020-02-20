@@ -1,6 +1,6 @@
 # Channel Status Notifier
 
-CSN (Channel Status Notifier) is a small node script, running on AWS Lambda (+ CloudWatch, for cron jobs). It fetches all the members of a specified Slack Channel, analyses their status (based on keyword first, then emoji), and produces an absence report for the day.
+CSN (Channel Status Notifier) is a small node script, running on AWS Lambda using the Events Slack API. It fetches all the members of a specified Slack Channel, analyses their status (based on keyword first, then emoji), and produces an absence report for the day.
 
 Absence categories include:
 
