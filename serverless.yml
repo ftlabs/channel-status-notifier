@@ -3,12 +3,22 @@ service: channel-status-notifier
 provider:
   name: aws
   runtime: nodejs12.x
+  profile: csn
   environment:
     NODE_ENV: "${file(./serverless.env.yml):NODE_ENV}"
     SLACK_TOKEN: "${file(./serverless.env.yml):SLACK_TOKEN}"
 
 plugins:
   - serverless-offline
+
+stackTags:
+  teamDL: ftlabs@ft.com
+  environment: p
+  systemCode: channel-status-notifier
+tags:
+  teamDL: ftlabs@ft.com
+  environment: p
+  systemCode: channel-status-notifier
 
 functions:
   post:

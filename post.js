@@ -164,16 +164,13 @@ function prepMessage(statuses) {
 }
 
 exports.post = async function(event, context) {
-  console.log("EVENT: \n" + JSON.stringify(event, null, 2));
-  console.log(
-    "JSON.parse(event.body).event.channel",
-    JSON.parse(event.body).event.channel
-  );
-  const result = await getMembers({
-    channel: JSON.parse(event.body).event.channel
-  });
-  return {
-    statusCode: 200,
-    body: "success"
-  };
+  try {
+    await getMembers({
+      channel: JSON.parse(event.body).event.channel
+    });
+    return {
+      statusCode: 200,
+      body: "success"
+    };
+  } catch (err) {}
 };
