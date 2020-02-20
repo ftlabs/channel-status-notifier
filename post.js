@@ -172,5 +172,10 @@ exports.post = async function(event, context) {
       statusCode: 200,
       body: "success"
     };
-  } catch (err) {}
+  } catch (err) {
+    return {
+      statusCode: 401,
+      body: "fail"
+    };
+  }
 };

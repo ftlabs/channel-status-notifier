@@ -4,6 +4,7 @@ provider:
   name: aws
   runtime: nodejs12.x
   profile: csn
+  stage: ${opt:stage, 'dev'}
   environment:
     NODE_ENV: "${file(./serverless.env.yml):NODE_ENV}"
     SLACK_TOKEN: "${file(./serverless.env.yml):SLACK_TOKEN}"
