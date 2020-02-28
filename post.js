@@ -27,6 +27,7 @@ async function getMembers({ channel }) {
     const result = await web.groups.info({
       channel
     });
+    console.log("result", result.group.members);
 
     const memberSelection = await getStatuses(result.group.members);
     const awayMessage = prepMessage(memberSelection);
@@ -41,6 +42,7 @@ async function getMembers({ channel }) {
     if (error.code === ErrorCode.PlatformError) {
       console.log(error.data);
     } else {
+      console.log(error);
       console.log("Unexpected error in getMembers()");
     }
   }
@@ -165,14 +167,16 @@ function prepMessage(statuses) {
 
 exports.post = async function(event, context) {
   try {
+    console.log("triggered");
     await getMembers({
-      channel: JSON.parse(event.body).event.channel
+      channel: event.Records[0].Sns.Message
     });
     return {
       statusCode: 200,
       body: "success"
     };
   } catch (err) {
+    console.log(err);
     return {
       statusCode: 401,
       body: "fail"

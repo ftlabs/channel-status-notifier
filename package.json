@@ -10,10 +10,13 @@
   "license": "MIT",
   "dependencies": {
     "@slack/web-api": "^5.4.0",
+    "aws-sdk": "^2.625.0",
     "axios": "^0.19.2",
-    "dotenv": "^8.2.0"
+    "dotenv": "^8.2.0",
+    "serverless-offline-sns": "^0.68.0"
   },
   "devDependencies": {
-    "serverless-offline": "^5.12.1"
+    "serverless-offline": "^5.12.1",
+    "serverless-step-functions": "^2.17.1"
   }
 }
