@@ -27,9 +27,10 @@ async function getMembers({ channel }) {
     const result = await web.groups.info({
       channel
     });
-    console.log("result", result.group.members);
 
-    const memberSelection = await getStatuses(result.group.members);
+    const members = result.group.members;
+
+    const memberSelection = await getStatuses(members);
     const awayMessage = prepMessage(memberSelection);
 
     if (awayMessage !== "") {
@@ -55,6 +56,8 @@ async function getStatuses(members) {
       const memberProfile = await web.users.info({
         user: members[i]
       });
+
+      console.log(memberProfile);
 
       const memberStatus = checkStatus(memberProfile.user.profile);
       if (memberStatus) {
@@ -165,9 +168,15 @@ function prepMessage(statuses) {
   return message;
 }
 
+const times = x => f => {
+  if (x > 0) {
+    f();
+    times(x - 1)(f);
+  }
+};
+
 exports.post = async function(event, context) {
   try {
-    console.log("triggered");
     await getMembers({
       channel: event.Records[0].Sns.Message
     });

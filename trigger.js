@@ -5,6 +5,7 @@ exports.trigger = async function(event, context) {
     let snsOpts = {
       region: "eu-west-1"
     };
+
     if (process.env.IS_OFFLINE) {
       snsOpts.endpoint = "http://127.0.0.1:4002";
     }
