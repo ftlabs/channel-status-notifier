@@ -41,6 +41,10 @@ provider:
   profile: csn
   stage: ${opt:stage, 'dev'}
   region: eu-west-1
+  stackTags:
+    teamDL: ftlabs@ft.com
+    environment: p
+    systemCode: channel-status-notifier
   environment:
     NODE_ENV: "${file(./serverless.env.yml):NODE_ENV}"
     SLACK_TOKEN: "${file(./serverless.env.yml):SLACK_TOKEN}"
@@ -50,10 +54,6 @@ plugins:
   - serverless-step-functions
   - serverless-offline-sns
 
-stackTags:
-  teamDL: ftlabs@ft.com
-  environment: p
-  systemCode: channel-status-notifier
 tags:
   teamDL: ftlabs@ft.com
   environment: p

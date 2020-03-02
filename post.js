@@ -24,11 +24,11 @@ async function postUpdate({ text, channel }) {
 
 async function getMembers({ channel }) {
   try {
-    const result = await web.groups.info({
+    const channelType = { G: "group", C: "channel" };
+    const result = await web[channelType[`${channel[0]}`] + "s"].info({
       channel
     });
-
-    const members = result.group.members;
+    const members = result[channelType[`${channel[0]}`]].members;
 
     const memberSelection = await getStatuses(members);
     const awayMessage = prepMessage(memberSelection);
@@ -40,6 +40,7 @@ async function getMembers({ channel }) {
       });
     }
   } catch (error) {
+    console.log("getting into error");
     if (error.code === ErrorCode.PlatformError) {
       console.log(error.data);
     } else {
