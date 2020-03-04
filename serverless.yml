@@ -5,6 +5,7 @@ custom:
     port: 4002 # a free port for the sns server to run on
     debug: false
   mySnsTopic: "${self:service}-${self:provider.stage}-sns-consume"
+  emojiReactionSns: "${self:service}-${self:provider.stage}-emoji-reaction-consume"
   mySnsTopicArn:
     local: "arn:aws:sns:us-east-1:123456789012:${self:custom.mySnsTopic}"
     dev:
@@ -31,6 +32,32 @@ custom:
             ],
           ],
       }
+  emojiReactionSnsArn:
+    local: "arn:aws:sns:us-east-1:123456789012:${self:custom.emojiReactionSns}"
+    dev:
+      {
+        "Fn::Join":
+          [
+            "",
+            [
+              "arn:aws:sns:${self:provider.region}:",
+              { "Ref": "AWS::AccountId" },
+              ":${self:custom.emojiReactionSns}",
+            ],
+          ],
+      }
+    prod:
+      {
+        "Fn::Join":
+          [
+            "",
+            [
+              "arn:aws:sns:${self:provider.region}:",
+              { "Ref": "AWS::AccountId" },
+              ":${self:custom.emojiReactionSns}",
+            ],
+          ],
+      }
 
 provider:
   name: aws
@@ -48,6 +75,7 @@ provider:
   environment:
     NODE_ENV: "${file(./serverless.env.yml):NODE_ENV}"
     SLACK_TOKEN: "${file(./serverless.env.yml):SLACK_TOKEN}"
+    APP_ID: "${file(./serverless.env.yml):APP_ID}"
 
 plugins:
   - serverless-offline
@@ -64,6 +92,10 @@ functions:
     handler: post.post
     events:
       - sns: ${self:custom.mySnsTopic}
+  emojiReact:
+    handler: emojiReact.emojiReact
+    events:
+      - sns: ${self:custom.emojiReactionSns}
 
   trigger:
     handler: trigger.trigger
@@ -73,3 +105,4 @@ functions:
           method: any
     environment:
       mySnsTopicArn: ${self:custom.mySnsTopicArn.${self:provider.stage}}
+      emojiReactionSnsArn: ${self:custom.emojiReactionSnsArn.${self:provider.stage}}

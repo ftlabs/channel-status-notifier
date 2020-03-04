@@ -178,6 +178,7 @@ const times = x => f => {
 
 exports.post = async function(event, context) {
   try {
+    console.log("message", event.Records[0].Sns.Message);
     await getMembers({
       channel: event.Records[0].Sns.Message
     });
@@ -186,6 +187,7 @@ exports.post = async function(event, context) {
       body: "success"
     };
   } catch (err) {
+    console.log("error");
     console.log(err);
     return {
       statusCode: 401,

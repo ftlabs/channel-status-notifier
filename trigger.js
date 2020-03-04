@@ -2,6 +2,14 @@ const AWS = require("aws-sdk");
 
 exports.trigger = async function(event, context) {
   try {
+    const eventBody = JSON.parse(event.body).event;
+    if (isReactionToOtherPost(eventBody)) {
+      return {
+        statusCode: 200,
+        body: "ok"
+      };
+    }
+
     let snsOpts = {
       region: "eu-west-1"
     };
@@ -11,10 +19,27 @@ exports.trigger = async function(event, context) {
     }
 
     let sns = new AWS.SNS(snsOpts);
-    let messageData = {
-      Message: JSON.parse(event.body).event.channel,
-      TopicArn: process.env.mySnsTopicArn
-    };
+
+    let messageData;
+    switch (eventBody.type) {
+      case "app_mention":
+        messageData = {
+          Message: eventBody.channel,
+          TopicArn: process.env.mySnsTopicArn
+        };
+        break;
+      case "reaction_added":
+        console.log("getting into reaction");
+        console.log();
+        messageData = {
+          Message: JSON.stringify({
+            item: eventBody.item,
+            reaction: eventBody.reaction
+          }),
+          TopicArn: process.env.emojiReactionSnsArn
+        };
+        break;
+    }
 
     console.log("PUBLISHING MESSAGE TO SNS:", messageData);
     await sns.publish(messageData).promise();
@@ -25,7 +50,6 @@ exports.trigger = async function(event, context) {
       body: "ok"
     };
   } catch (err) {
-    console.log("error", err);
     console.error(err);
     return {
       statusCode: 200,
@@ -33,3 +57,7 @@ exports.trigger = async function(event, context) {
     };
   }
 };
+
+function isReactionToOtherPost({ type, item_user }) {
+  return type === "reaction_added" && item_user !== process.env.APP_ID;
+}
