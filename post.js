@@ -19,6 +19,8 @@ async function postUpdate({ text, channel }) {
     } else {
       console.log("Unexpected error in postUpdate()");
     }
+
+    console.log("hello");
   }
 }
 
