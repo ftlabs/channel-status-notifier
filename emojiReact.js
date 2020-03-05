@@ -1,20 +1,45 @@
+const { WebClient, ErrorCode } = require("@slack/web-api");
+const web = new WebClient(process.env.SLACK_TOKEN);
+
+const { AWAY_TYPES } = require("./data/types.js");
+
 exports.emojiReact = async function(event, context) {
   try {
-    console.log(event);
-    console.log(JSON.stringify(event));
-    console.log(event.Records[0].Sns.Message);
-    console.log(JSON.parse(event.Records[0].Sns.Message));
-    console.log(JSON.parse(event.Records[0].Sns.Message));
-
-    return {
-      statusCode: 200,
-      body: "success"
-    };
+    const { item, reaction } = JSON.parse(event.Records[0].Sns.Message);
+    const awayType = getReactionType(reaction);
+    if (!awayType) {
+      console.log("Wrong away type");
+      return;
+    }
+    const message = await getItemMessage(item);
+    if (!message) {
+      throw new Error("No message being retrieved");
+    }
+    console.log(message);
+    return;
   } catch (err) {
     console.log(err);
-    return {
-      statusCode: 401,
-      body: "fail"
-    };
+    return;
   }
 };
+
+function getReactionType(reaction) {
+  const typeObj = AWAY_TYPES.find(typeObj =>
+    typeObj.emoji.includes(`:${reaction}:`)
+  );
+  if (typeObj) {
+    return typeObj.type;
+  }
+}
+
+async function getItemMessage({ channel, ts }) {
+  const messageResult = await web.conversations.history({
+    channel,
+    ts,
+    limit: 1,
+    inclusive: true
+  });
+  if (messageResult.messages) {
+    return messageResult.messages[0];
+  }
+}

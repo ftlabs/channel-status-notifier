@@ -34,7 +34,8 @@ exports.trigger = async function(event, context) {
         messageData = {
           Message: JSON.stringify({
             item: eventBody.item,
-            reaction: eventBody.reaction
+            reaction: eventBody.reaction,
+            user: eventBody.user
           }),
           TopicArn: process.env.emojiReactionSnsArn
         };
