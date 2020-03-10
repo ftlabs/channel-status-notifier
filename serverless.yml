@@ -63,7 +63,7 @@ provider:
   name: aws
   role: arn:aws:iam::807711422928:role/FTApplicationRoleFor_channel-status-notifier
   runtime: nodejs12.x
-  timeout: 30
+  timeout: 29
   memorySize: 3008
   profile: csn
   stage: ${opt:stage, 'dev'}
