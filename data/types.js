@@ -47,6 +47,46 @@ module.exports = {
         emoji: [":palm_tree:", ":airplane:", ":desert_island", ":sunny:"],
         type: "holiday",
         message: ":palm_tree: *On holiday:*"
+      },
+      {
+        keywords: [
+          "lunch",
+          "food",
+          "snack",
+          "dinner",
+          "eating",
+          "munching",
+          "brunch",
+          "breakfast",
+          "snacking"
+        ],
+        emoji: [":spagbol:", ":spaghetti:", ":desert_island", ":yum:"],
+        type: "lunch",
+        message: ":spagbol: *On lunch:*"
+      },
+      {
+        keywords: ["walk", "walking", "break", "breaking"],
+        emoji: [":walking:", ":woman-walking:"],
+        type: "walking",
+        message: ":walking: *Getting some fresh air:*"
+      },
+      {
+        keywords: ["caring", "child", "childcare", "entertaining"],
+        emoji: [":child:"],
+        type: "caring",
+        message: ":walking: *Looking after someone else:*"
+      },
+      {
+        keywords: ["caring", "child", "childcare", "entertaining"],
+        emoji: [":child:"],
+        type: "caring",
+        message: ":walking: *Looking after someone else:*"
+      },
+      {
+        keywords: ["Unavailable"],
+        emoji: [":blockers:"],
+        type: "unavailable",
+        message: ":blockers: *Unavailable:*"
       }
     ];
   })()

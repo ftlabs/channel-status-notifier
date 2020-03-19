@@ -23,6 +23,7 @@ exports.trigger = async function(event, context) {
     let messageData;
     switch (eventBody.type) {
       case "app_mention":
+        console.log("eventBody", eventBody);
         messageData = {
           Message: eventBody.channel,
           TopicArn: process.env.mySnsTopicArn
@@ -30,7 +31,8 @@ exports.trigger = async function(event, context) {
         break;
       case "reaction_added":
         console.log("getting into reaction");
-        console.log();
+        console.log("item", eventBody.item);
+        console.log("eventBody", eventBody);
         messageData = {
           Message: JSON.stringify({
             item: eventBody.item,
