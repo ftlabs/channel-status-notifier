@@ -55,21 +55,24 @@ exports.trigger = async function(event, context) {
             item: eventBody.item,
             reaction: eventBody.reaction,
             user: eventBody.user,
-            type: eventBody.type
+            eventType: eventBody.type
           }),
           TopicArn: process.env.emojiReactionSnsArn
         };
         break;
       case "reaction_removed":
+        console.log("Reaction removed");
         console.log("eventBody", eventBody);
-
         messageData = {
-          item: eventBody.item,
-          reaction: eventBody.reaction,
-          user: eventBody.user,
-          type: eventBody.type
+          Message: JSON.stringify({
+            item: eventBody.item,
+            reaction: eventBody.reaction,
+            user: eventBody.user,
+            eventType: eventBody.type
+          }),
+          TopicArn: process.env.emojiReactionSnsArn
         };
-        return;
+        console.log("messageData", messageData);
         break;
     }
 

@@ -78,7 +78,7 @@ module.exports = {
       },
       {
         keywords: ["unavailable"],
-        emoji: [":blockers:"],
+        emoji: [":blockers:, :no_entry:"],
         type: "unavailable",
         message: ":blockers: *Unavailable:*"
       }

@@ -10,13 +10,33 @@ Absence categories include:
 - Work from home
 - On parental leave
 
-Note: this report is dependent on members of the channel updating their Slack status regularly; and before the alert is triggered.
+You can change the status throughout the day by reacting with the appropriate emoji.
+
+# Adding this to your channel
+
+Invite the app to your public or private channel.
+
+```
+/invite @channel_status_notifi
+```
+
+Then to trigger an automatic response set up a reminder for any interval you want.
+
+```
+/remind #<channel_name> every weekday at 10am @channel_status_notifi
+```
+
+You can also manually call it by mentioning the app
+
+```
+@channel_status_notifi
+```
 
 # Architecture
 
 The app consists of two lambdas one triggered via api gateway which uses AWS sns to publish a message with the channel name that triggers the functionality. This is because the Slack events api has a 3 second timout function that sends anouther request if it does not get a response. This would cause double messages to be sent.
 
-# Installation
+# To install your own version for your workspace
 
 Clone the repository. Then install the dependencies.
 

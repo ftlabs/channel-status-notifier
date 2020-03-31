@@ -5,7 +5,10 @@ const { AWAY_TYPES } = require("./data/types.js");
 
 exports.emojiReact = async function(event, context) {
   try {
-    const { item, reaction, user } = JSON.parse(event.Records[0].Sns.Message);
+    console.log("triggered");
+    const { item, reaction, user, eventType } = JSON.parse(
+      event.Records[0].Sns.Message
+    );
     const { type, message } = getReactionType(reaction);
     if (!type) {
       return;
@@ -19,12 +22,21 @@ exports.emojiReact = async function(event, context) {
     });
     const name = userDetails.user.profile.real_name;
 
-    const formattedMessage = formatMessage({
-      text: messageDetails.text,
-      name,
-      type,
-      message
-    });
+    let formattedMessage;
+    console.log("eventType", eventType);
+    if (eventType === "reaction_removed") {
+      console.log("getting into removed");
+      formattedMessage = removeName({ name, text: messageDetails.text });
+      console.log("formattedMessage", formattedMessage);
+    } else {
+      formattedMessage = formatMessage({
+        text: messageDetails.text,
+        name,
+        type,
+        message
+      });
+    }
+
     const updatedMessage = await updateMessage({
       item,
       message: formattedMessage
@@ -88,8 +100,8 @@ function addNameToMessage({ text, name, message }) {
   let lastPart = splitViaStatus[1].split("\n");
   const originalNames = lastPart[1];
   let newNames;
-  if (originalNames) {
-    newNames = name + ", " + originalNames;
+  if (originalNames.trim()) {
+    newNames = name + "," + originalNames;
   } else {
     newNames = name;
   }
