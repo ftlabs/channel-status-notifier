@@ -3,7 +3,7 @@ module.exports = {
     return [
       {
         keywords: ["ill", "sick"],
-        emoji: [":ill:", ":face_with_head_bandage:"],
+        emoji: [":ill:", ":face_with_head_bandage:", ":face_with_thermometer:"],
         type: "ill",
         message: ":ill: *Off sick:*"
       },
@@ -15,7 +15,7 @@ module.exports = {
       },
       {
         keywords: ["home", "wfh", "working", "work"],
-        emoji: [":house:", ":house_with_garden:", ":computer:"],
+        emoji: [":house:", ":house_with_garden:", ":computer:", ":wfh:"],
         type: "wfh",
         message: ":house_with_garden: *WFH:*"
       },
@@ -65,8 +65,8 @@ module.exports = {
         message: ":spagbol: *On lunch:*"
       },
       {
-        keywords: ["walk", "walking", "break", "breaking"],
-        emoji: [":walking:", ":woman-walking:"],
+        keywords: ["walk", "walking", "break", "breaking", "air"],
+        emoji: [":walking:", ":woman-walking:", ":man-walking:"],
         type: "walking",
         message: ":walking: *Getting some fresh air:*"
       },
@@ -74,16 +74,10 @@ module.exports = {
         keywords: ["caring", "child", "childcare", "entertaining"],
         emoji: [":child:"],
         type: "caring",
-        message: ":walking: *Looking after someone else:*"
+        message: ":child: *Looking after someone else:*"
       },
       {
-        keywords: ["caring", "child", "childcare", "entertaining"],
-        emoji: [":child:"],
-        type: "caring",
-        message: ":walking: *Looking after someone else:*"
-      },
-      {
-        keywords: ["Unavailable"],
+        keywords: ["unavailable"],
         emoji: [":blockers:"],
         type: "unavailable",
         message: ":blockers: *Unavailable:*"

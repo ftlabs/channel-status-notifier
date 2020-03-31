@@ -8,14 +8,12 @@ exports.emojiReact = async function(event, context) {
     const { item, reaction, user } = JSON.parse(event.Records[0].Sns.Message);
     const { type, message } = getReactionType(reaction);
     if (!type) {
-      console.log("Wrong away type");
       return;
     }
     const messageDetails = await getItemMessage(item);
     if (!messageDetails) {
       throw new Error("No message being retrieved");
     }
-    console.log("message", messageDetails);
     const userDetails = await web.users.info({
       user
     });
@@ -31,7 +29,6 @@ exports.emojiReact = async function(event, context) {
       item,
       message: formattedMessage
     });
-    console.log(updatedMessage);
     return;
   } catch (err) {
     console.log(err);
@@ -41,7 +38,6 @@ exports.emojiReact = async function(event, context) {
 
 async function updateMessage({ item, message }) {
   const { ts, channel } = item;
-  console.log("update.ts", ts);
   const result = await web.chat.update({ channel, ts, text: message });
   return result;
 }
@@ -58,7 +54,6 @@ function getReactionType(reaction) {
 }
 
 async function getItemMessage({ channel, ts }) {
-  console.log("ts", ts);
   const messageResult = await web.conversations.history({
     channel,
     latest: ts,
@@ -78,10 +73,30 @@ function formatMessage({ text, name, message, type }) {
 
 function addName({ text, name, message, type }) {
   let finalMessage;
+
   if (!text.includes(message)) {
     finalMessage = text += `${message} \n ${name} \n\n`;
   } else {
+    finalMessage = addNameToMessage({ text, name, message });
   }
+  return finalMessage;
+}
+
+function addNameToMessage({ text, name, message }) {
+  const splitViaStatus = text.split(message);
+  const firstPart = splitViaStatus[0];
+  let lastPart = splitViaStatus[1].split("\n");
+  const originalNames = lastPart[1];
+  let newNames;
+  if (originalNames) {
+    newNames = name + ", " + originalNames;
+  } else {
+    newNames = name;
+  }
+  lastPart[1] = newNames;
+  const newLastPart = lastPart.join("\n");
+  const finalMessage = firstPart + message + newLastPart;
+
   return finalMessage;
 }
 

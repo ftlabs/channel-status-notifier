@@ -3,15 +3,16 @@ const { WebClient, ErrorCode } = require("@slack/web-api");
 
 const web = new WebClient(process.env.SLACK_TOKEN);
 
-async function postUpdate({ text, channel }) {
+async function postUpdate({ text, channel, test }) {
   try {
+    const postingChannel = test ? test : channel;
+    console.log("postingChannel", postingChannel);
     const result = await web.chat.postMessage({
       text,
-      channel
+      channel: postingChannel
     });
-
     console.log(
-      `Successfully send message ${result.ts} in conversation ${channel}`
+      `Successfully send message ${result.ts} in conversation ${postingChannel}`
     );
   } catch (error) {
     if (error.code === ErrorCode.PlatformError) {
@@ -24,7 +25,7 @@ async function postUpdate({ text, channel }) {
   }
 }
 
-async function getMembers({ channel }) {
+async function getMembers({ channel, test }) {
   try {
     const channelType = { G: "group", C: "channel" };
     const result = await web[channelType[`${channel[0]}`] + "s"].info({
@@ -38,7 +39,14 @@ async function getMembers({ channel }) {
     if (awayMessage !== "") {
       const posting = await postUpdate({
         text: `In the this channel today: \n\n ${awayMessage}`,
-        channel
+        channel,
+        test
+      });
+    } else {
+      const posting = await postUpdate({
+        text: `No one in this channel has a status set`,
+        channel,
+        test
       });
     }
   } catch (error) {
@@ -127,7 +135,11 @@ function prepMessage(statuses) {
     wfh: [],
     ooo: [],
     cake: [],
-    parent: []
+    parent: [],
+    caring: [],
+    unavailable: [],
+    walking: [],
+    lunch: []
   };
 
   statuses.forEach(status => {
@@ -168,6 +180,31 @@ function prepMessage(statuses) {
     )}\n\n`;
   }
 
+  if (userStatus.caring.length > 0) {
+    message += `${
+      AWAY_TYPES.find(obj => obj.type === "caring").message
+    } \n ${userStatus.caring.join(", ")}\n\n`;
+  }
+
+  if (userStatus.unavailable.length > 0) {
+    message += `${
+      AWAY_TYPES.find(obj => obj.type === "unavailable").message
+    } \n ${userStatus.unavailable.join(", ")}\n\n`;
+  }
+
+  if (userStatus.walking.length > 0) {
+    console.log("getting in walking");
+    message += `${
+      AWAY_TYPES.find(obj => obj.type === "walking").message
+    } \n ${userStatus.walking.join(", ")}\n\n`;
+  }
+
+  if (userStatus.lunch.length > 0) {
+    message += `${
+      AWAY_TYPES.find(obj => obj.type === "lunch").message
+    } \n ${userStatus.lunch.join(", ")}\n\n`;
+  }
+  console.log("message", message);
   return message;
 }
 
@@ -181,8 +218,10 @@ const times = x => f => {
 exports.post = async function(event, context) {
   try {
     console.log("message", event.Records[0].Sns.Message);
+    const { channel, test } = JSON.parse(event.Records[0].Sns.Message);
     await getMembers({
-      channel: event.Records[0].Sns.Message
+      channel,
+      test
     });
     return {
       statusCode: 200,
