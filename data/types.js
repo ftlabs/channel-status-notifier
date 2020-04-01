@@ -6,35 +6,35 @@ module.exports = {
         emoji: [":ill:", ":face_with_head_bandage:", ":face_with_thermometer:"],
         defaultEmoji: "ill",
         type: "ill",
-        message: ":ill: *Off sick:*"
+        message: ":ill: *Off sick:* \n"
       },
       {
         keywords: ["ooo", "office", "out", "busy", "conference", "training"],
         emoji: [":no_entry_sign:"],
         defaultEmoji: "no_entry_sign",
         type: "ooo",
-        message: ":no_entry_sign: *Out of office:*"
+        message: ":no_entry_sign: *Out of office:* \n"
       },
       {
         keywords: ["home", "wfh", "working", "work"],
         emoji: [":house:", ":house_with_garden:", ":computer:", ":wfh:"],
         defaultEmoji: "house",
         type: "wfh",
-        message: ":house_with_garden: *WFH:*"
+        message: ":house_with_garden: *WFH:* \n"
       },
       {
         keywords: ["birthday", "cake", ":cake:"],
         emoji: [":birthday:", ":cake:", ":cupcake:"],
         defaultEmoji: "birthday",
         type: "cake",
-        message: "`:cake: *Would like some cake:*"
+        message: "`:cake: *Would like some cake:* \n"
       },
       {
         keywords: ["mat", "maternity", "pat", "paternity", "parental"],
         emoji: [":baby:", ":baby_bottle:", ":pregnant_woman:"],
         defaultEmoji: "baby",
         type: "parent",
-        message: ":baby: *On parental leave:*"
+        message: ":baby: *On parental leave:* \n"
       },
       {
         keywords: [
@@ -52,7 +52,7 @@ module.exports = {
         emoji: [":palm_tree:", ":airplane:", ":desert_island", ":sunny:"],
         defaultEmoji: "palm_tree",
         type: "holiday",
-        message: ":palm_tree: *On holiday:*"
+        message: ":palm_tree: *On holiday:* \n"
       },
       {
         keywords: [
@@ -69,28 +69,28 @@ module.exports = {
         emoji: [":spagbol:", ":spaghetti:", ":yum:"],
         type: "lunch",
         defaultEmoji: "spagbol",
-        message: ":spagbol: *On lunch:*"
+        message: ":spagbol: *On lunch:* \n"
       },
       {
         keywords: ["walk", "walking", "break", "breaking", "air"],
         emoji: [":walking:", ":woman-walking:", ":man-walking:"],
         defaultEmoji: "walking",
         type: "walking",
-        message: ":walking: *Getting some fresh air:*"
+        message: ":walking: *Getting some fresh air:* \n"
       },
       {
         keywords: ["caring", "child", "childcare", "entertaining"],
         emoji: [":child:"],
         defaultEmoji: "child",
         type: "caring",
-        message: ":child: *Looking after someone else:*"
+        message: ":child: *Looking after someone else:* \n"
       },
       {
         keywords: ["unavailable"],
         emoji: [":blockers:, :no_entry:"],
         defaultEmoji: "blockers",
         type: "unavailable",
-        message: ":blockers: *Unavailable:*"
+        message: ":blockers: *Unavailable:* \n"
       }
     ];
   })()

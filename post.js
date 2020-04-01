@@ -6,7 +6,6 @@ const web = new WebClient(process.env.SLACK_TOKEN);
 async function postUpdate({ text, channel, test }) {
   try {
     const postingChannel = test ? test : channel;
-    console.log("postingChannel", postingChannel);
     const result = await web.chat.postMessage({
       text,
       channel: postingChannel
@@ -21,8 +20,6 @@ async function postUpdate({ text, channel, test }) {
     } else {
       console.log("Unexpected error in postUpdate()");
     }
-
-    console.log("hello");
   }
 }
 
@@ -52,7 +49,6 @@ async function getMembers({ channel, test }) {
     }
     return posting;
   } catch (error) {
-    console.log("getting into error");
     if (error.code === ErrorCode.PlatformError) {
       console.log(error.data);
     } else {
@@ -69,8 +65,6 @@ async function getStatuses(members) {
       const memberProfile = await web.users.info({
         user: members[i]
       });
-
-      console.log(memberProfile);
 
       const memberStatus = checkStatus(memberProfile.user.profile);
       if (memberStatus) {
@@ -150,63 +144,30 @@ function prepMessage(statuses) {
 
   let message = "";
 
-  if (userStatus.holiday.length > 0) {
-    message += `:palm_tree: *On holiday:* \n ${userStatus.holiday.join(
-      ", "
-    )} \n\n`;
-  }
+  Object.keys(userStatus).forEach(key => {
+    message += addStatus({
+      statuses: userStatus[key],
+      statusType: key
+    });
+  });
 
-  if (userStatus.wfh.length > 0) {
-    message += `:house_with_garden: *WFH:* \n ${userStatus.wfh.join(", ")}\n\n`;
-  }
+  return message;
+}
 
-  if (userStatus.ooo.length > 0) {
-    message += `:no_entry_sign: *Out of office:* \n ${userStatus.ooo.join(
-      ", "
-    )}\n\n`;
+function addStatus({ statuses, statusType }) {
+  console.log(
+    "AWAY_TYPES.find(typeObj => typeObj.type === statusType).message;",
+    AWAY_TYPES.find(typeObj => typeObj.type === statusType).message
+  );
+  console.log("statuses", statuses);
+  console.log("statusType", statusType);
+  message = "";
+  message += AWAY_TYPES.find(typeObj => typeObj.type === statusType).message;
+  if (statuses.length > 0) {
+    message += `${statuses.join(", ")}`;
   }
+  message += `\n\n`;
 
-  if (userStatus.parent.length > 0) {
-    message += `:baby: *On parental leave:* \n ${userStatus.parent.join(
-      ", "
-    )}\n\n`;
-  }
-
-  if (userStatus.ill.length > 0) {
-    message += `:ill: *Off sick:* \n ${userStatus.ill.join(", ")}\n\n`;
-  }
-
-  if (userStatus.cake.length > 0) {
-    message += `:cake: *Would like some cake:* \n ${userStatus.cake.join(
-      ", "
-    )}\n\n`;
-  }
-
-  if (userStatus.caring.length > 0) {
-    message += `${
-      AWAY_TYPES.find(obj => obj.type === "caring").message
-    } \n ${userStatus.caring.join(", ")}\n\n`;
-  }
-
-  if (userStatus.unavailable.length > 0) {
-    message += `${
-      AWAY_TYPES.find(obj => obj.type === "unavailable").message
-    } \n ${userStatus.unavailable.join(", ")}\n\n`;
-  }
-
-  if (userStatus.walking.length > 0) {
-    console.log("getting in walking");
-    message += `${
-      AWAY_TYPES.find(obj => obj.type === "walking").message
-    } \n ${userStatus.walking.join(", ")}\n\n`;
-  }
-
-  if (userStatus.lunch.length > 0) {
-    message += `${
-      AWAY_TYPES.find(obj => obj.type === "lunch").message
-    } \n ${userStatus.lunch.join(", ")}\n\n`;
-  }
-  console.log("message", message);
   return message;
 }
 
@@ -218,8 +179,6 @@ async function addReactions({ channel, timestamp }) {
         timestamp,
         name: AWAY_TYPES[i].defaultEmoji
       });
-
-      console.log(result);
     } catch (error) {
       if (error.code === ErrorCode.PlatformError) {
         console.log(error.data);
@@ -232,7 +191,6 @@ async function addReactions({ channel, timestamp }) {
 
 exports.post = async function(event, context) {
   try {
-    console.log("message", event.Records[0].Sns.Message);
     const { channel, test } = JSON.parse(event.Records[0].Sns.Message);
     const timestamp = await getMembers({
       channel,

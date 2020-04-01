@@ -9,7 +9,13 @@ exports.emojiReact = async function(event, context) {
     const { item, reaction, user, eventType } = JSON.parse(
       event.Records[0].Sns.Message
     );
-    const { type, message } = getReactionType(reaction);
+    const { type, message, defaultEmoji } = getReactionType(reaction);
+
+    console.log("type", type);
+    console.log("reaction", reaction);
+    console.log("defaultEmoji", defaultEmoji);
+    console.log("item", item);
+
     if (!type) {
       return;
     }
@@ -17,17 +23,25 @@ exports.emojiReact = async function(event, context) {
     if (!messageDetails) {
       throw new Error("No message being retrieved");
     }
+
     const userDetails = await web.users.info({
       user
     });
     const name = userDetails.user.profile.real_name;
 
     let formattedMessage;
-    console.log("eventType", eventType);
     if (eventType === "reaction_removed") {
-      console.log("getting into removed");
+      const splitViaStatus = messageDetails.text.split(message);
+      const firstPart = splitViaStatus;
+      console.log(firstPart);
+      let lastPart = splitViaStatus[1].split("\n");
+      const originalNames = lastPart[1];
+      console.log("originalNames", originalNames);
+      if (!originalNames.includes(name)) {
+        console.log("ORIGINAL NAMEEEEEEEE");
+        return;
+      }
       formattedMessage = removeName({ name, text: messageDetails.text });
-      console.log("formattedMessage", formattedMessage);
     } else {
       formattedMessage = formatMessage({
         text: messageDetails.text,
@@ -97,6 +111,7 @@ function addName({ text, name, message, type }) {
 function addNameToMessage({ text, name, message }) {
   const splitViaStatus = text.split(message);
   const firstPart = splitViaStatus[0];
+  console.log(firstPart);
   let lastPart = splitViaStatus[1].split("\n");
   const originalNames = lastPart[1];
   let newNames;
