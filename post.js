@@ -151,16 +151,13 @@ function prepMessage(statuses) {
     });
   });
 
+  message +=
+    "\n _You can change your status throughout the day by adding and removing the relevent emoji as a reaction to this message._";
+
   return message;
 }
 
 function addStatus({ statuses, statusType }) {
-  console.log(
-    "AWAY_TYPES.find(typeObj => typeObj.type === statusType).message;",
-    AWAY_TYPES.find(typeObj => typeObj.type === statusType).message
-  );
-  console.log("statuses", statuses);
-  console.log("statusType", statusType);
   message = "";
   message += AWAY_TYPES.find(typeObj => typeObj.type === statusType).message;
   if (statuses.length > 0) {

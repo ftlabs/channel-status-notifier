@@ -27,7 +27,7 @@ module.exports = {
         emoji: [":birthday:", ":cake:", ":cupcake:"],
         defaultEmoji: "birthday",
         type: "cake",
-        message: "`:cake: *Would like some cake:* \n"
+        message: "`:cake: *Birthday:* \n"
       },
       {
         keywords: ["mat", "maternity", "pat", "paternity", "parental"],
