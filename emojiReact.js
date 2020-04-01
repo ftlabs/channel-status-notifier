@@ -101,7 +101,7 @@ function addNameToMessage({ text, name, message }) {
   const originalNames = lastPart[1];
   let newNames;
   if (originalNames.trim()) {
-    newNames = name + "," + originalNames;
+    newNames = name + ", " + originalNames;
   } else {
     newNames = name;
   }

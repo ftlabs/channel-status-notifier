@@ -14,6 +14,7 @@ async function postUpdate({ text, channel, test }) {
     console.log(
       `Successfully send message ${result.ts} in conversation ${postingChannel}`
     );
+    return result.ts;
   } catch (error) {
     if (error.code === ErrorCode.PlatformError) {
       console.log(error.data);
@@ -35,20 +36,21 @@ async function getMembers({ channel, test }) {
 
     const memberSelection = await getStatuses(members);
     const awayMessage = prepMessage(memberSelection);
-
+    let posting;
     if (awayMessage !== "") {
-      const posting = await postUpdate({
+      posting = await postUpdate({
         text: `In the this channel today: \n\n ${awayMessage}`,
         channel,
         test
       });
     } else {
-      const posting = await postUpdate({
+      posting = await postUpdate({
         text: `No one in this channel has a status set`,
         channel,
         test
       });
     }
+    return posting;
   } catch (error) {
     console.log("getting into error");
     if (error.code === ErrorCode.PlatformError) {
@@ -208,21 +210,17 @@ function prepMessage(statuses) {
   return message;
 }
 
-const times = x => f => {
-  if (x > 0) {
-    f();
-    times(x - 1)(f);
-  }
-};
+async function addReactions({ channel, post }) {}
 
 exports.post = async function(event, context) {
   try {
     console.log("message", event.Records[0].Sns.Message);
     const { channel, test } = JSON.parse(event.Records[0].Sns.Message);
-    await getMembers({
+    const result = await getMembers({
       channel,
       test
     });
+    await addReactions({ channel, post: result });
     return {
       statusCode: 200,
       body: "success"
