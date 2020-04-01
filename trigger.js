@@ -4,7 +4,7 @@ exports.trigger = async function(event, context) {
   try {
     const eventBody = JSON.parse(event.body).event;
     console.log("eventBody", eventBody);
-    if (isReactionToOtherPost(eventBody)) {
+    if (isReactionToOtherPost(eventBody) || appEmojiReact(eventBody)) {
       console.log("not valid emoji react");
       return {
         statusCode: 200,
@@ -98,4 +98,8 @@ function isReactionToOtherPost({ type, item_user }) {
     (type === "reaction_added" || type === "reaction_removed") &&
     item_user !== process.env.APP_ID
   );
+}
+
+function appEmojiReact({ user, type }) {
+  return type === "reaction_added" && user === process.env.APP_ID;
 }

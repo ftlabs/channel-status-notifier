@@ -210,17 +210,35 @@ function prepMessage(statuses) {
   return message;
 }
 
-async function addReactions({ channel, post }) {}
+async function addReactions({ channel, timestamp }) {
+  for (let i = 0; i < AWAY_TYPES.length; ++i) {
+    try {
+      const result = await web.reactions.add({
+        channel,
+        timestamp,
+        name: AWAY_TYPES[i].defaultEmoji
+      });
+
+      console.log(result);
+    } catch (error) {
+      if (error.code === ErrorCode.PlatformError) {
+        console.log(error.data);
+      } else {
+        console.log("Unexpected error in addReactions()");
+      }
+    }
+  }
+}
 
 exports.post = async function(event, context) {
   try {
     console.log("message", event.Records[0].Sns.Message);
     const { channel, test } = JSON.parse(event.Records[0].Sns.Message);
-    const result = await getMembers({
+    const timestamp = await getMembers({
       channel,
       test
     });
-    await addReactions({ channel, post: result });
+    await addReactions({ channel, timestamp });
     return {
       statusCode: 200,
       body: "success"
