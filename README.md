@@ -14,7 +14,7 @@ You can change the status throughout the day by reacting with the appropriate em
 
 # Adding this to your channel
 
-Invite the app to your public or private channel.
+Invite the app to your public or private channel. For a private channel you will have to manually type out the channel name as auto complete will not be available e.g #<private channel name>
 
 ```
 /invite @channel_status_notifi

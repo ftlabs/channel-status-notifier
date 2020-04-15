@@ -2,19 +2,14 @@ const { WebClient, ErrorCode } = require("@slack/web-api");
 const web = new WebClient(process.env.SLACK_TOKEN);
 
 const { AWAY_TYPES } = require("./data/types.js");
+const { MESSAGE } = require("./data/message.js");
 
 exports.emojiReact = async function(event, context) {
   try {
-    console.log("triggered");
     const { item, reaction, user, eventType } = JSON.parse(
       event.Records[0].Sns.Message
     );
     const { type, message, defaultEmoji } = getReactionType(reaction);
-
-    console.log("type", type);
-    console.log("reaction", reaction);
-    console.log("defaultEmoji", defaultEmoji);
-    console.log("item", item);
 
     if (!type) {
       return;
@@ -33,12 +28,9 @@ exports.emojiReact = async function(event, context) {
     if (eventType === "reaction_removed") {
       const splitViaStatus = messageDetails.text.split(message);
       const firstPart = splitViaStatus;
-      console.log(firstPart);
       let lastPart = splitViaStatus[1].split("\n");
       const originalNames = lastPart[1];
-      console.log("originalNames", originalNames);
       if (!originalNames.includes(name)) {
-        console.log("ORIGINAL NAMEEEEEEEE");
         return;
       }
       formattedMessage = removeName({ name, text: messageDetails.text });
@@ -101,7 +93,10 @@ function addName({ text, name, message, type }) {
   let finalMessage;
 
   if (!text.includes(message)) {
-    finalMessage = text += `${message} \n ${name} \n\n`;
+    console.log("on herererere");
+    const textSplit = text.split(MESSAGE.ending);
+    console.log("textSplit", textSplit);
+    finalMessage = textSplit[0] += `\n ${message} \n ${name} \n ${MESSAGE.ending}`;
   } else {
     finalMessage = addNameToMessage({ text, name, message });
   }
@@ -111,7 +106,6 @@ function addName({ text, name, message, type }) {
 function addNameToMessage({ text, name, message }) {
   const splitViaStatus = text.split(message);
   const firstPart = splitViaStatus[0];
-  console.log(firstPart);
   let lastPart = splitViaStatus[1].split("\n");
   const originalNames = lastPart[1];
   let newNames;

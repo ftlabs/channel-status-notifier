@@ -1,5 +1,7 @@
 if (process.env.NODE_ENV !== "production") require("dotenv").config();
 const { WebClient, ErrorCode } = require("@slack/web-api");
+const { AWAY_TYPES } = require("./data/types.js");
+const { MESSAGE } = require("./data/message.js");
 
 const web = new WebClient(process.env.SLACK_TOKEN);
 
@@ -82,8 +84,6 @@ async function getStatuses(members) {
   return results;
 }
 
-const { AWAY_TYPES } = require("./data/types.js");
-
 function checkStatus(profile) {
   let status = "";
 
@@ -151,19 +151,19 @@ function prepMessage(statuses) {
     });
   });
 
-  message +=
-    "\n _You can change your status throughout the day by adding and removing the relevent emoji as a reaction to this message._";
-
+  message += MESSAGE.ending;
   return message;
 }
 
 function addStatus({ statuses, statusType }) {
   message = "";
-  message += AWAY_TYPES.find(typeObj => typeObj.type === statusType).message;
   if (statuses.length > 0) {
+    message += `${
+      AWAY_TYPES.find(typeObj => typeObj.type === statusType).message
+    }\n`;
     message += `${statuses.join(", ")}`;
+    message += `\n\n`;
   }
-  message += `\n\n`;
 
   return message;
 }
