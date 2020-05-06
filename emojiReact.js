@@ -95,6 +95,9 @@ function addName({ text, name, message, type }) {
   if (!text.includes(message)) {
     console.log("on herererere");
     const textSplit = text.split(MESSAGE.ending);
+    console.log("message", message);
+    console.log("text", text);
+
     console.log("textSplit", textSplit);
     finalMessage = textSplit[0] += `\n ${message} \n ${name} \n ${MESSAGE.ending}`;
   } else {

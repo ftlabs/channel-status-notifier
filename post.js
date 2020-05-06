@@ -10,7 +10,8 @@ async function postUpdate({ text, channel, test }) {
     const postingChannel = test ? test : channel;
     const result = await web.chat.postMessage({
       text,
-      channel: postingChannel
+      channel: postingChannel,
+      unfurl_links: false
     });
     console.log(
       `Successfully send message ${result.ts} in conversation ${postingChannel}`
